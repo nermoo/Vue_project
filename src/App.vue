@@ -1,18 +1,62 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div v-if="loading">
+      <Loader />
+    </div>
+    <CardComp  :usersList="users" />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+
+import CardComp from './components/CardComp.vue'
+import axios from 'axios'
+import Loader from './components/loadingScreen.vue'
+// import {getUsers,createUser} from './services/UserServices';
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
-  }
+    CardComp,
+    Loader
+},
+
+data:()=>({
+  loading:false,
+    users:[] 
+}),
+
+async created(){
+  this.loading=true;
+    try{
+      const userData=await axios.get('https://jsonplaceholder.typicode.com/users');
+      this.users=userData.data;
+      console.log(this.users);
+      this.loading=false;
+
+    }catch(e){
+      console.log(e);
+    }
+}
+,
+methods:{
+
+  // getUsers(){
+  //   getUsers().then(response=>{
+  //     console.log(response);
+  //     this.users=response;
+  //   })
+  // },
+
+  // createUser(){
+  //   createUser().then(response=>{
+  //     console.log(response);
+  //   })
+  // }
+
+}
+
+
 }
 </script>
 
